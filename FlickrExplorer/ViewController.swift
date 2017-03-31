@@ -10,8 +10,6 @@ import UIKit
 import Foundation
 import CoreLocation
 
-import NVActivityIndicatorView
-
 let apiKey = "856e9424143b4897159666a5cd4439b0"
 // get location and render
 class ViewController: UIViewController {
@@ -78,28 +76,7 @@ extension ViewController {
         } else {
             photoListAddress = "https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=\(apiKey)&per_page=250&format=json&nojsoncallback=1"
         }
-//        print(photoListAddress)
-//        Alamofire.request(photoListAddress).validate().responseJSON { response in
-//            switch response.result {
-//            case .success:
-//                if let value = response.result.value {
-//                    let jsonPhotoListTemp = JSON(value)
-//                    let jsonPhotoList = jsonPhotoListTemp["photos"]["photo"]
-//                    let totalNumber = jsonPhotoListTemp["photos"]["total"].intValue
-//                    if totalNumber == 0 {
-//                        // load photo without geolocation attributes
-//                        self.reloadList(title: "No Photo Found at Your Locaiton")
-//                    } else {
-//                        // prepare to load photo
-//                        self.photos = self.photoList.addPhotoToList(jsonPhotoList: jsonPhotoList)
-//                        self.activityIndicatorView.stopAnimating()
-//                        self.performSegue(withIdentifier: "showPhotosSegue", sender: nil)
-//                    }
-//                }
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
+
         let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
         let photoListUrl = URL(string: photoListAddress)!
         

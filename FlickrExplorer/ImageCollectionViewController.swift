@@ -94,56 +94,26 @@ extension ImageCollectionViewController : UICollectionViewDelegateFlowLayout {
 extension ImageCollectionViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        if isSearch {
-            photosBasedOnSearch.loadPhotoList(searchTerm: searchBar.text!) { completion in
-                if completion != nil {
-                    // replace object array photos with search result
-                    self.photos = completion!
-                    self.itemCount = self.photos.count
-                    self.isSearch = false
-                    self.resetButton.isEnabled = true
-                    self.oldPhotos.removeAll()
-                    self.searchBar.placeholder = "Filter on tags or reset to start a new search"
-                    self.searchBar.text = nil
-                    self.collectionView.reloadData()
-                } else {
-                    let alert = UIAlertController(title: "No Result Found", message: "Please change your search term", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                }
-            }
-        } else {
-            let searchText = searchBar.text?.lowercased()
-            let myGroup = DispatchGroup()
-            var indexPathForDeleteArray = [IndexPath]()
-            for i in 0 ..< self.photos.count {
-                myGroup.enter()
-                self.photos[i].loadTag() { completion in
-                    self.photos[i].photoTags = completion
-                    if completion != nil {
-                        if !completion!.contains(searchText!) {
-                            let indexPath = IndexPath(item: i, section: 0)
-                            indexPathForDeleteArray.append(indexPath)
-                        }
-                    } else {
-                        let indexPath = IndexPath(item: i, section: 0)
-                        indexPathForDeleteArray.append(indexPath)
-                    }
-                    myGroup.leave()
-                }
-            }
-
-            myGroup.notify(queue: .main) {
-                self.oldPhotos = self.photos
-                // https://openradar.appspot.com/28167779 issue for performBatchUpdates
-                // so get indexPathForDeleteArray first and delete at once as a walkaround
-                self.collectionView.performBatchUpdates({
-                    self.itemCount -= indexPathForDeleteArray.count
-                    self.collectionView.deleteItems(at: indexPathForDeleteArray)
-                }, completion: nil)
+        // if the start a new search, search all text field, otherwise only search on tags
+        let followUpSearchOnTags = !isSearch
+        photosBasedOnSearch.loadPhotoList(searchTerm: searchBar.text!, followUpOnTags: followUpSearchOnTags) { completion in
+            if completion != nil {
+                // replace object array photos with search result
+                self.photos = completion!
+                self.itemCount = self.photos.count
+                self.isSearch = false
                 self.resetButton.isEnabled = true
+                self.oldPhotos.removeAll()
+                self.searchBar.placeholder = "Search on tags or reset for a new search"
+                self.searchBar.text = nil
+                self.collectionView.reloadData()
+            } else {
+                let alert = UIAlertController(title: "No Result Found", message: "Please change your search term", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             }
         }
+        
     }
 }
 

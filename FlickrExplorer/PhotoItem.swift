@@ -33,18 +33,6 @@ class PhotoItem {
     
     func loadImage(size: String, completion: @escaping (UIImage?) -> ()) {
         let imageAddress = (size == "h") ? imageURL(size: "h") : imageURL()
-//        Alamofire.request(loadURL).responseImage { response in
-//            switch response.result {
-//            case .success:
-//                if let image = response.result.value {
-//                    completion(image)
-//                }
-//            case .failure(let error):
-//                completion(nil)
-//                print(error)
-//            }
-//        }
-        
         let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
         let photoListUrl = URL(string: imageAddress)!
         
@@ -70,29 +58,6 @@ class PhotoItem {
     
     func loadTag(completion: @escaping ([String]?) -> ()) {
         let imageTagAddress = "https://api.flickr.com/services/rest/?method=flickr.tags.getListPhoto&api_key=\(apiKey)&photo_id=\(photoID)&format=json&nojsoncallback=1"
-//        Alamofire.request(imageTagUrl).validate().responseJSON { response in
-//            switch response.result {
-//            case .success:
-//                if let value = response.result.value {
-//                    let jsonTagListTemp = JSON(value)
-//                    let jsonTagList = jsonTagListTemp["photo"]["tags"]["tag"]
-//                    let totalNumber = jsonTagListTemp["photo"]["tags"]["tag"].count
-//                    var tags = [String]()
-//                    if totalNumber > 0 {
-//                        for i in 0 ..< totalNumber {
-//                            tags.append(jsonTagList[i]["raw"].stringValue.lowercased())
-//                        }
-//                        completion(tags)
-//                    } else {
-//                        completion(nil)
-//                    }
-//                }
-//                
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-//    }
         let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
         let photoListUrl = URL(string: imageTagAddress)!
         
@@ -111,7 +76,6 @@ class PhotoItem {
                                             let tempString = jsonTagList[i]["raw"] as! String
                                             tags.append(tempString.lowercased())
                                         }
-                                        print(tags)
                                         completion(tags)
                                     } else {
                                         completion(nil)

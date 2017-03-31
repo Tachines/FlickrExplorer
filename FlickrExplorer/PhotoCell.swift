@@ -13,10 +13,9 @@ class PhotoCell: UICollectionViewCell {
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     
-    
     override func prepareForReuse() {
-        super.prepareForReuse()
         self.photoImageView.image = nil
+        super.prepareForReuse()
     }
     
     func downloadPhotoforCell(photoItem: PhotoItem) {
@@ -25,6 +24,7 @@ class PhotoCell: UICollectionViewCell {
             if completion != nil {
                 self.photoImageView.image = completion
                 self.activityIndicatorView.stopAnimating()
+                self.activityIndicatorView.hidesWhenStopped = true
             }
         }
     }

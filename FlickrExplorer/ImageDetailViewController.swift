@@ -9,7 +9,7 @@
 import UIKit
 
 class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
-    
+    // large image in this page is scrollable
     @IBOutlet weak var imageScrollView: UIScrollView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -18,7 +18,6 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var photoSize: UILabel!
     @IBOutlet weak var photoTags: UILabel!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
-    
     
     var photoItem: PhotoItem?
     
@@ -41,20 +40,17 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     fileprivate func loadLargeImage(photoItem: PhotoItem) {
         photoItem.loadImage(size: "h") { completion in
             if completion != nil {
-                
-
-                    self.activityIndicatorView.stopAnimating()
-                    self.imageView.image = completion
-                    let actualWidth = completion!.size.width
-                    let actualHeight = completion!.size.height
-                    self.photoSize.text = "\(actualWidth)(W) x \(actualHeight)(H)"
-    
+                self.activityIndicatorView.stopAnimating()
+                self.activityIndicatorView.hidesWhenStopped = true
+                self.imageView.image = completion
+                let actualWidth = completion!.size.width
+                let actualHeight = completion!.size.height
+                self.photoSize.text = "\(actualWidth)(W) x \(actualHeight)(H)"
             }
         }
     }
     
     fileprivate func setImageDetails() {
-        
         if self.photoItem?.title == "" {
             self.titleLabel.text = "Untitled"
             self.photoName.text = "Untitled"
@@ -67,14 +63,11 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         loadLargeImage(photoItem: photoItem!)
         activityIndicatorView.startAnimating()
         self.photoItem?.loadTag() { completion in
-            
             if completion != nil {
                 self.photoTags.text = completion!.joined(separator: " ")
             } else {
                 self.photoTags.text = "No tag found"
             }
-        
         }
-        
     }
 }
