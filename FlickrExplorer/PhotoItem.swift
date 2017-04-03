@@ -6,8 +6,10 @@
 //  Copyright © 2017 Tac. All rights reserved.
 //
 
-import Foundation
 import UIKit
+import AlamofireImage
+import Alamofire
+import SwiftyJSON
 
 class PhotoItem {
     
@@ -32,100 +34,44 @@ class PhotoItem {
     }
     
     func loadImage(size: String, completion: @escaping (UIImage?) -> ()) {
-        let imageAddress = (size == "h") ? imageURL(size: "h") : imageURL()
-//        Alamofire.request(loadURL).responseImage { response in
-//            switch response.result {
-//            case .success:
-//                if let image = response.result.value {
-//                    completion(image)
-//                }
-//            case .failure(let error):
-//                completion(nil)
-//                print(error)
-//            }
-//        }
-        
-        let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
-        let photoListUrl = URL(string: imageAddress)!
-        
-        let task = session.dataTask(with: photoListUrl, completionHandler: { (data, response, error) in
-            if error != nil {
-                print(error!.localizedDescription)
-                completion(nil)
-            } else {
-                if let imageData = data {
-                    let image = UIImage(data: imageData)
-                    // get image successfully
-                    
+        let loadURL = (size == "h") ? imageURL(size: "h") : imageURL()
+        Alamofire.request(loadURL).responseImage { response in
+            switch response.result {
+            case .success:
+                if let image = response.result.value {
                     completion(image)
-                    
-                } else {
-                    print("Fail to download image")
-                    completion(nil)
                 }
+            case .failure(let error):
+                completion(nil)
+                print(error)
             }
-        })
-        task.resume()
+        }
     }
     
     func loadTag(completion: @escaping ([String]?) -> ()) {
-        let imageTagAddress = "https://api.flickr.com/services/rest/?method=flickr.tags.getListPhoto&api_key=\(apiKey)&photo_id=\(photoID)&format=json&nojsoncallback=1"
-//        Alamofire.request(imageTagUrl).validate().responseJSON { response in
-//            switch response.result {
-//            case .success:
-//                if let value = response.result.value {
-//                    let jsonTagListTemp = JSON(value)
-//                    let jsonTagList = jsonTagListTemp["photo"]["tags"]["tag"]
-//                    let totalNumber = jsonTagListTemp["photo"]["tags"]["tag"].count
-//                    var tags = [String]()
-//                    if totalNumber > 0 {
-//                        for i in 0 ..< totalNumber {
-//                            tags.append(jsonTagList[i]["raw"].stringValue.lowercased())
-//                        }
-//                        completion(tags)
-//                    } else {
-//                        completion(nil)
-//                    }
-//                }
-//                
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-//    }
-        let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
-        let photoListUrl = URL(string: imageTagAddress)!
-        
-        let task = session.dataTask(with: photoListUrl, completionHandler: { (data, response, error) in
-            if error != nil {
-                print(error!.localizedDescription)
-            } else {
-                do {
-                    if let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: Any] {
-                        if let jsonTagListTemp = json["photo"] as? [String: Any] {
-                            if let jsonAllTagsList = jsonTagListTemp["tags"] as? [String: Any] {
-                                if let jsonTagList = jsonAllTagsList["tag"] as? [[String: Any]] {
-                                    var tags = [String]()
-                                    if jsonTagList.count > 0 {
-                                        for i in 0 ..< jsonTagList.count {
-                                            let tempString = jsonTagList[i]["raw"] as! String
-                                            tags.append(tempString.lowercased())
-                                        }
-                                        print(tags)
-                                        completion(tags)
-                                    } else {
-                                        completion(nil)
-                                    }
-                                }
-                            }
+        let imageTagUrl = "https://api.flickr.com/services/rest/?method=flickr.tags.getListPhoto&api_key=\(apiKey)&photo_id=\(photoID)&format=json&nojsoncallback=1"
+        Alamofire.request(imageTagUrl).validate().responseJSON { response in
+            switch response.result {
+            case .success:
+                if let value = response.result.value {
+                    let jsonTagListTemp = JSON(value)
+                    let jsonTagList = jsonTagListTemp["photo"]["tags"]["tag"]
+                    let totalNumber = jsonTagListTemp["photo"]["tags"]["tag"].count
+                    var tags = [String]()
+                    if totalNumber > 0 {
+                        for i in 0 ..< totalNumber {
+                            tags.append(jsonTagList[i]["raw"].stringValue.lowercased())
                         }
+                        completion(tags)
+                    } else {
+                        completion(nil)
                     }
-                } catch {
-                    print("Response doesn't conform to json format")
-                    completion(nil)
                 }
+                
+            case .failure(let error):
+                print(error)
             }
-        })
-        task.resume()
+        }
     }
 }
+

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -24,28 +25,33 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading flickr photos" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uME-lu-CR7">
-                                <rect key="frame" x="57" y="367" width="260" height="34"/>
+                                <rect key="frame" x="57" y="370" width="260" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="RmB-WD-q1a">
-                                <rect key="frame" x="169" y="315" width="37" height="37"/>
-                            </activityIndicatorView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Lq-im-6pw" customClass="NVActivityIndicatorView" customModule="NVActivityIndicatorView">
+                                <rect key="frame" x="157.5" y="304.5" width="58" height="58"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.51764705879999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="58" id="eZa-Uq-7oE"/>
+                                    <constraint firstAttribute="height" constant="58" id="oia-be-KAN"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.0" blue="0.51764705879999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="RmB-WD-q1a" firstAttribute="centerX" secondItem="uME-lu-CR7" secondAttribute="centerX" id="Ayk-li-Dv6"/>
-                            <constraint firstItem="RmB-WD-q1a" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="SK5-xS-igA"/>
-                            <constraint firstItem="RmB-WD-q1a" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="sZ6-ik-VOg"/>
-                            <constraint firstItem="uME-lu-CR7" firstAttribute="top" secondItem="RmB-WD-q1a" secondAttribute="bottom" constant="15" id="wjU-WR-5F9"/>
+                            <constraint firstItem="6Lq-im-6pw" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="2iC-8x-L5N"/>
+                            <constraint firstItem="6Lq-im-6pw" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" constant="-1" id="40s-HT-7EG"/>
+                            <constraint firstItem="uME-lu-CR7" firstAttribute="centerX" secondItem="6Lq-im-6pw" secondAttribute="centerX" constant="1.1666666666666856" id="Oi3-cJ-RzG"/>
+                            <constraint firstItem="uME-lu-CR7" firstAttribute="top" secondItem="6Lq-im-6pw" secondAttribute="bottom" constant="7.5" id="uuF-1B-IyB"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="nua-Fm-H1t">
                         <nil key="title"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="activityIndicatorView" destination="RmB-WD-q1a" id="tSo-gy-cko"/>
+                        <outlet property="activityIndicatorView" destination="6Lq-im-6pw" id="5aQ-6L-vjl"/>
                         <segue destination="UKM-04-K6c" kind="show" identifier="showPhotosSegue" id="qSd-ID-rLw"/>
                     </connections>
                 </viewController>
@@ -85,21 +91,26 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DZo-C6-AQp">
                                                     <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                                 </imageView>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Zpe-pw-Mpl">
-                                                    <rect key="frame" x="65" y="65" width="20" height="20"/>
-                                                </activityIndicatorView>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cnb-zW-MzO" customClass="NVActivityIndicatorView" customModule="NVActivityIndicatorView">
+                                                    <rect key="frame" x="48" y="48" width="55" height="55"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="55" id="9UV-b7-RaD"/>
+                                                        <constraint firstAttribute="width" constant="55" id="YQQ-Qq-PmA"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="Zpe-pw-Mpl" firstAttribute="centerX" secondItem="DZo-C6-AQp" secondAttribute="centerX" id="9U7-Vv-PNt"/>
                                             <constraint firstAttribute="trailing" secondItem="DZo-C6-AQp" secondAttribute="trailing" id="F4l-4q-oUA"/>
-                                            <constraint firstItem="Zpe-pw-Mpl" firstAttribute="centerY" secondItem="DZo-C6-AQp" secondAttribute="centerY" id="Ngo-dK-Fac"/>
+                                            <constraint firstItem="Cnb-zW-MzO" firstAttribute="centerY" secondItem="DZo-C6-AQp" secondAttribute="centerY" id="REx-pk-r9j"/>
                                             <constraint firstItem="DZo-C6-AQp" firstAttribute="leading" secondItem="Sp6-Lf-7yX" secondAttribute="leading" id="Z0I-KS-NlD"/>
                                             <constraint firstItem="DZo-C6-AQp" firstAttribute="top" secondItem="Sp6-Lf-7yX" secondAttribute="top" id="cVB-R6-ZrL"/>
+                                            <constraint firstItem="Cnb-zW-MzO" firstAttribute="centerX" secondItem="DZo-C6-AQp" secondAttribute="centerX" id="cnY-no-3X8"/>
                                             <constraint firstAttribute="bottom" secondItem="DZo-C6-AQp" secondAttribute="bottom" id="oQa-Cg-mRU"/>
                                         </constraints>
                                         <connections>
-                                            <outlet property="activityIndicatorView" destination="Zpe-pw-Mpl" id="cyf-Q5-cvX"/>
+                                            <outlet property="activityIndicatorView" destination="Cnb-zW-MzO" id="6mT-Pp-y0d"/>
                                             <outlet property="photoImageView" destination="DZo-C6-AQp" id="GrV-22-sBw"/>
                                         </connections>
                                     </collectionViewCell>
@@ -243,18 +254,23 @@
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JSh-6o-qM2">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="500"/>
                                     </imageView>
-                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="au8-IZ-cu3">
-                                        <rect key="frame" x="169" y="232" width="37" height="37"/>
-                                    </activityIndicatorView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dWX-FT-Vg4" customClass="NVActivityIndicatorView" customModule="NVActivityIndicatorView">
+                                        <rect key="frame" x="160" y="223" width="55" height="55"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="55" id="Hfv-iI-O3k"/>
+                                            <constraint firstAttribute="width" constant="55" id="jcG-Vs-knz"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="au8-IZ-cu3" firstAttribute="centerX" secondItem="JSh-6o-qM2" secondAttribute="centerX" id="DPl-h5-3Ay"/>
-                                    <constraint firstItem="au8-IZ-cu3" firstAttribute="centerY" secondItem="JSh-6o-qM2" secondAttribute="centerY" id="HcE-vF-ao7"/>
                                     <constraint firstAttribute="bottom" secondItem="JSh-6o-qM2" secondAttribute="bottom" id="JWc-Vm-eje"/>
+                                    <constraint firstItem="dWX-FT-Vg4" firstAttribute="centerY" secondItem="JSh-6o-qM2" secondAttribute="centerY" id="Jml-wY-NVV"/>
                                     <constraint firstItem="JSh-6o-qM2" firstAttribute="leading" secondItem="aG6-rU-EhW" secondAttribute="leading" id="MSp-26-arY"/>
                                     <constraint firstItem="JSh-6o-qM2" firstAttribute="centerX" secondItem="aG6-rU-EhW" secondAttribute="centerX" id="aew-Me-hbh"/>
                                     <constraint firstAttribute="trailing" secondItem="JSh-6o-qM2" secondAttribute="trailing" id="hes-II-yS0"/>
                                     <constraint firstItem="JSh-6o-qM2" firstAttribute="top" secondItem="aG6-rU-EhW" secondAttribute="top" id="j8B-59-7Ew"/>
+                                    <constraint firstItem="dWX-FT-Vg4" firstAttribute="centerX" secondItem="JSh-6o-qM2" secondAttribute="centerX" id="lzO-yA-nnj"/>
                                     <constraint firstItem="JSh-6o-qM2" firstAttribute="centerY" secondItem="aG6-rU-EhW" secondAttribute="centerY" id="wzf-IK-Tn9"/>
                                 </constraints>
                                 <connections>
@@ -273,7 +289,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sy5-pU-35b">
-                                        <rect key="frame" x="74" y="11.5" width="226" height="22.5"/>
+                                        <rect key="frame" x="74" y="12.5" width="226" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="19"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -308,7 +324,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="activityIndicatorView" destination="au8-IZ-cu3" id="qaG-YP-Pd2"/>
+                        <outlet property="activityIndicatorView" destination="dWX-FT-Vg4" id="vGc-ow-KFL"/>
                         <outlet property="imageScrollView" destination="aG6-rU-EhW" id="YNp-V9-yz9"/>
                         <outlet property="imageView" destination="JSh-6o-qM2" id="XEM-9B-CPi"/>
                         <outlet property="photoId" destination="ggd-8C-w6k" id="e6g-6O-ZXD"/>

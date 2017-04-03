@@ -7,17 +7,16 @@
 //
 
 import UIKit
-import Foundation
 import CoreLocation
-
+import Alamofire
+import SwiftyJSON
 import NVActivityIndicatorView
 
 let apiKey = "856e9424143b4897159666a5cd4439b0"
 // get location and render
 class ViewController: UIViewController {
     
-    
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndicatorView: NVActivityIndicatorView!
     
     fileprivate var locationManager = CLLocationManager()
     fileprivate var photoList = PhotoList()
@@ -72,61 +71,34 @@ extension ViewController: CLLocationManagerDelegate {
 // load photo list
 extension ViewController {
     fileprivate func loadPhotoList(longitude: Double, latitude: Double, hasLocation: Bool) {
-        let photoListAddress: String
+        let photoListUrl: String
         if hasLocation {
-            photoListAddress = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(apiKey)&lat=\(latitude)&lon=\(longitude)&per_page=250&format=json&nojsoncallback=1"
+            photoListUrl = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(apiKey)&lat=\(latitude)&lon=\(longitude)&per_page=250&format=json&nojsoncallback=1"
         } else {
-            photoListAddress = "https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=\(apiKey)&per_page=250&format=json&nojsoncallback=1"
+            photoListUrl = "https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=\(apiKey)&per_page=250&format=json&nojsoncallback=1"
         }
-//        print(photoListAddress)
-//        Alamofire.request(photoListAddress).validate().responseJSON { response in
-//            switch response.result {
-//            case .success:
-//                if let value = response.result.value {
-//                    let jsonPhotoListTemp = JSON(value)
-//                    let jsonPhotoList = jsonPhotoListTemp["photos"]["photo"]
-//                    let totalNumber = jsonPhotoListTemp["photos"]["total"].intValue
-//                    if totalNumber == 0 {
-//                        // load photo without geolocation attributes
-//                        self.reloadList(title: "No Photo Found at Your Locaiton")
-//                    } else {
-//                        // prepare to load photo
-//                        self.photos = self.photoList.addPhotoToList(jsonPhotoList: jsonPhotoList)
-//                        self.activityIndicatorView.stopAnimating()
-//                        self.performSegue(withIdentifier: "showPhotosSegue", sender: nil)
-//                    }
-//                }
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-        let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
-        let photoListUrl = URL(string: photoListAddress)!
-        
-        let task = session.dataTask(with: photoListUrl, completionHandler: { (data, response, error) in
-            if error != nil {
-                print(error!.localizedDescription)
-            } else {
-                do {
-                    if let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: Any] {
-                        if let jsonPhotoListTemp = json["photos"] as? [String: Any] {
-                            if let jsonPhotoList = jsonPhotoListTemp["photo"] as? [[String: Any]] {
-                                if jsonPhotoList.count == 0 {
-                                    self.reloadList(title: "No Photo Found at Your Locaiton")
-                                } else {
-                                    self.photos = self.photoList.addPhotoToList(jsonPhotoList: jsonPhotoList)
-                                    self.activityIndicatorView.stopAnimating()
-                                    self.performSegue(withIdentifier: "showPhotosSegue", sender: nil)
-                                }
-                            }
-                        }
+
+        Alamofire.request(photoListUrl).validate().responseJSON { response in
+            switch response.result {
+            case .success:
+                if let value = response.result.value {
+                    let jsonPhotoListTemp = JSON(value)
+                    let jsonPhotoList = jsonPhotoListTemp["photos"]["photo"]
+                    let totalNumber = jsonPhotoListTemp["photos"]["total"].intValue
+                    if totalNumber == 0 {
+                        // load photo without geolocation attributes
+                        self.reloadList(title: "No Photo Found at Your Locaiton")
+                    } else {
+                        // prepare to load photo
+                        self.photos = self.photoList.addPhotoToList(jsonPhotoList: jsonPhotoList)
+                        self.activityIndicatorView.stopAnimating()
+                        self.performSegue(withIdentifier: "showPhotosSegue", sender: nil)
                     }
-                } catch {
-                    print("Response doesn't conform to json format")
                 }
+            case .failure(let error):
+                print(error)
             }
-        })
-        task.resume()
+        }
     }
     
     fileprivate func reloadList(title: String) {

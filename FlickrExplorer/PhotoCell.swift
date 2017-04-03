@@ -7,25 +7,33 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
+
+
 
 class PhotoCell: UICollectionViewCell {
     
     @IBOutlet weak var photoImageView: UIImageView!
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
-    
+    @IBOutlet weak var activityIndicatorView: NVActivityIndicatorView!
     
     override func prepareForReuse() {
+        photoImageView.image = nil
         super.prepareForReuse()
-        self.photoImageView.image = nil
     }
     
-    func downloadPhotoforCell(photoItem: PhotoItem) {
-        activityIndicatorView.startAnimating()
+    func downloadPhotoWithTags(photoItem: PhotoItem) {
+        setIndicator()
         photoItem.loadImage(size: "n") { completion in
             if completion != nil {
                 self.photoImageView.image = completion
-                self.activityIndicatorView.stopAnimating()
             }
+            self.activityIndicatorView.stopAnimating()
         }
+    }
+    
+    fileprivate func setIndicator() {
+        activityIndicatorView.color = .gray
+        activityIndicatorView.type = .ballClipRotate
+        activityIndicatorView.startAnimating()
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class ImageCollectionViewController: UIViewController {
     
@@ -14,7 +15,7 @@ class ImageCollectionViewController: UIViewController {
     @IBOutlet weak var resetButton: UIBarButtonItem!
     
     fileprivate let itemsPerRow: CGFloat = 3
-    fileprivate let cellEdgeInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
+    fileprivate let cellEdgeInsets = UIEdgeInsets(top: 11.0, left: 11.0, bottom: 11.0, right: 11.0)
     fileprivate var photoItem: PhotoItem?
     fileprivate let searchBar = UISearchBar()
     fileprivate var photosBasedOnSearch = PhotosBasedOnSearch()
@@ -63,14 +64,14 @@ extension ImageCollectionViewController: UICollectionViewDelegate, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as! PhotoCell
-        cell.downloadPhotoforCell(photoItem: photos[indexPath.row])
+        cell.downloadPhotoWithTags(photoItem: photos[indexPath.row])
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         photoItem = photos[indexPath.row]
-        self.performSegue(withIdentifier: "showImageDetailSegue", sender: nil)
+        performSegue(withIdentifier: "showImageDetailSegue", sender: nil)
     }
 }
 
@@ -94,8 +95,9 @@ extension ImageCollectionViewController : UICollectionViewDelegateFlowLayout {
 extension ImageCollectionViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
+        let searchText = searchBar.text?.lowercased().replacingOccurrences(of: " ", with: "_")
         if isSearch {
-            photosBasedOnSearch.loadPhotoList(searchTerm: searchBar.text!) { completion in
+            photosBasedOnSearch.loadPhotoList(searchTerm: searchText!) { completion in
                 if completion != nil {
                     // replace object array photos with search result
                     self.photos = completion!
@@ -113,7 +115,6 @@ extension ImageCollectionViewController: UISearchBarDelegate {
                 }
             }
         } else {
-            let searchText = searchBar.text?.lowercased()
             let myGroup = DispatchGroup()
             var indexPathForDeleteArray = [IndexPath]()
             for i in 0 ..< self.photos.count {
