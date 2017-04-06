@@ -2,7 +2,7 @@ PODS:
   - Alamofire (4.4.0)
   - AlamofireImage (3.2.0):
     - Alamofire (~> 4.1)
-  - NVActivityIndicatorView (3.5.2)
+  - NVActivityIndicatorView (3.6.0)
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
@@ -14,7 +14,7 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
   AlamofireImage: 157ed682cc81d3b9db4fb90c1f12180ac552d93b
-  NVActivityIndicatorView: 8c10abd410a0657afd21aa853373e1a3cfc25e7f
+  NVActivityIndicatorView: c7c1c4300b418bd9ed06459e78d4df859ddbe31f
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
 PODFILE CHECKSUM: 25a55fb240acbfd6f9fd6bb91e02b15405fd71e1
