@@ -4,7 +4,7 @@ platform :ios, '9.0'
 
 use_frameworks!
 
-target ‘FlickrExplorer’ do
+target 'FlickrExplorer' do
 
 pod 'SwiftyJSON'
 pod 'Alamofire'
