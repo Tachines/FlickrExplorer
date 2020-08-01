@@ -35,10 +35,10 @@ class PhotoItem {
     
     func loadImage(size: String, completion: @escaping (UIImage?) -> ()) {
         let loadURL = (size == "h") ? imageURL(size: "h") : imageURL()
-        Alamofire.request(loadURL).responseImage { response in
+        AF.request(loadURL).responseImage { response in
             switch response.result {
             case .success:
-                if let image = response.result.value {
+                if let image = response.value {
                     completion(image)
                 }
             case .failure(let error):
@@ -50,10 +50,10 @@ class PhotoItem {
     
     func loadTag(completion: @escaping ([String]?) -> ()) {
         let imageTagUrl = "https://api.flickr.com/services/rest/?method=flickr.tags.getListPhoto&api_key=\(apiKey)&photo_id=\(photoID)&format=json&nojsoncallback=1"
-        Alamofire.request(imageTagUrl).validate().responseJSON { response in
+        AF.request(imageTagUrl).validate().responseJSON { response in
             switch response.result {
             case .success:
-                if let value = response.result.value {
+                if let value = response.value {
                     let jsonTagListTemp = JSON(value)
                     let jsonTagList = jsonTagListTemp["photo"]["tags"]["tag"]
                     let totalNumber = jsonTagListTemp["photo"]["tags"]["tag"].count
